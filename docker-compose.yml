@@ -7,7 +7,7 @@ services:
     # Задание имени контейнера для сервиса django
     container_name: django
     # Задание команды, которую нужно запустить при запуске контейнера для сервиса django
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["./wait-for-it.sh", "pgdb:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - .:/usr/src/app
     # Открытие порта на хостовой машине и перенаправление на порт в контейнере
@@ -16,7 +16,7 @@ services:
     # Зависимость от другого сервиса
     depends_on:
       - pgdb:
-        condition: service_healthy
+        
 
   pgdb:
     # Использование готового образа postgres
