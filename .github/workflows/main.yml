@@ -35,7 +35,7 @@ jobs:
       run: docker compose exec django python manage.py migrate # Use 'docker compose'
 
     - name: Run tests
-      run: docker compose exec django python manage.py test # Use 'docker compose'
+      run: docker compose exec django python manage.py test weather_app # Use 'docker compose'
 
     - name: Check database connection
       run: docker compose exec django python manage.py dbshell -c "SELECT 1;" # Use 'docker compose'
