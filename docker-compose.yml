@@ -30,6 +30,10 @@ services:
      # Связывание тома с директорией в контейнере для сохранения данных postgres
     volumes:
       - pgdbdata:/var/lib/postgresql/data/
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"] # Check if ready
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   pgdbdata:
