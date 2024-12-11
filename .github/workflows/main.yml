@@ -1,0 +1,40 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "main" ]  # Запускать при пуше в ветку main
+  pull_request:
+    branches: [ "main" ]  # Запускать при создании PR в ветку main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3  # Клонирование репозитория
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'  # Указываем версию Python, как в Dockerfile
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build and start containers
+      run: docker-compose up -d --build
+
+    - name: Run migrations
+      run: docker-compose exec django python manage.py migrate
+
+    - name: Run tests (optional)
+      run: docker-compose exec django python manage.py test
+
+    - name: Check database connection
+      run: docker-compose exec django python manage.py dbshell -c "SELECT 1;"
+
+    - name: Stop containers
+      if: always()  # Всегда останавливать контейнеры, даже если были ошибки
+      run: docker-compose down
