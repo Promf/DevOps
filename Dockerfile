@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 # Копируем файл requirements.txt внутрь контейнера
 COPY requirements.txt ./
 
+RUN chmod +x wait-for-it.sh
+
 USER root
 RUN apt-get update && apt-get install -y postgresql-client
 
