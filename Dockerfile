@@ -3,6 +3,7 @@ FROM python:3.12
 WORKDIR /usr/src/app
 # Копируем файл requirements.txt внутрь контейнера
 COPY requirements.txt ./
+COPY wait-for-it.sh ./
 
 RUN chmod +x wait-for-it.sh
 
