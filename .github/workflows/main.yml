@@ -39,13 +39,7 @@ jobs:
 
     - name: Check database connection
       run: |
-        docker compose exec django python manage.py shell -c "
-    from django.db import connection
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT 1;')
-        result = cursor.fetchone()
-        print('Database connection successful:', result)
-    "
+        echo "SELECT 1;" | docker compose exec django python manage.py dbshell
 
     - name: Stop containers
       if: always()
