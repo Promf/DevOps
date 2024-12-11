@@ -38,7 +38,14 @@ jobs:
       run: docker compose exec django python manage.py test weather_app # Use 'docker compose'
 
     - name: Check database connection
-      run: docker compose exec django python manage.py dbshell -c "SELECT 1;" # Use 'docker compose'
+      run: |
+        docker compose exec django python manage.py shell -c "
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT 1;')
+        result = cursor.fetchone()
+        print('Database connection successful:', result)
+    "
 
     - name: Stop containers
       if: always()
